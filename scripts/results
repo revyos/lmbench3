@@ -27,7 +27,7 @@ cd ../bin/$OS
 PATH=.:${PATH}; export PATH
 export SYNC_MAX
 export OUTPUT
-lmbench $CONFIG 2>../${RESULTS}
+lmbench $CONFIG ../${RESULTS}
 
 if [ X$MAIL = Xyes ]
 then	echo Mailing results
