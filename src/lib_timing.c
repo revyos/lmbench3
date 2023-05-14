@@ -500,7 +500,6 @@ error_exit:
 		waitpid(pids[i], NULL, 0);
 	}
 	free(merged_results);
-	insertinit(get_results());
 cleanup_exit:
 	close(response);
 	close(start_signal);

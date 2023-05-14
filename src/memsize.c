@@ -66,7 +66,6 @@ timeit(char *where, size_t size)
 {
 	int	sum = 0;
 	size_t	n;
-	size_t	timeout;
 	size_t	s_prev;
 	size_t	range;
 	size_t	incr = 1024 * 1024;
@@ -80,27 +79,24 @@ timeit(char *where, size_t size)
 
 	range = 1024 * 1024;
 	incr = 1024 * 1024;
-	s_prev = incr;
 	touchRange(where, range, pagesize);
 	for (range += incr; range <= size; range += incr) {
 		n = range / pagesize;
-		timeout = (incr / pagesize) * TOO_LONG + 10000;
-		set_alarm(timeout);
+		set_alarm(n * TOO_LONG);
 		touchRange(where + range - incr, incr, pagesize);
 		clear_alarm();
-		timeout += sum;
-		set_alarm(timeout);
+		set_alarm(n * TOO_LONG);
 		start(0);
 		touchRange(where, range, pagesize);
 		sum = stop(0, 0);
 		clear_alarm();
-		if (timeout + 10000 < sum || alarm_triggered) {
+		if ((sum / n) > TOO_LONG || alarm_triggered) {
 			size = range - incr;
 			break;
 		}
-		for (s_prev = (s = 8 * 1024 * 1024); s <= range; s *= 2)
-			s_prev = s;
-		incr = s_prev / 8;
+		for (s = 8 * 1024 * 1024; s <= range; s_prev = s, s *= 2)
+			if (s < s_prev) break;
+		incr = s / 8;
 		if (range < size && size < range + incr) {
 			incr = size - range;
 		}
