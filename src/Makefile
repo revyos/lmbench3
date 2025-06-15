@@ -58,7 +58,7 @@ SAMPLES=lmbench/Results/aix/rs6000 lmbench/Results/hpux/snake \
 	lmbench/Results/irix/indigo2 lmbench/Results/linux/pentium \
 	lmbench/Results/osf1/alpha lmbench/Results/solaris/ss20* 
 
-CPPFLAGS:=$(CPPFLAGS) -I /usr/include/tirpc/
+CPPFLAGS:=$(CPPFLAGS) -I /usr/include/tirpc/ -DHAVE_socklen_t
 
 COMPILE=$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
